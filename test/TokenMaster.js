@@ -3,14 +3,30 @@ const { expect } = require("chai")
 const NAME = "TokenMaster"
 const SYMBOL = "TM"
 
-const OCCASION_NAME = "ETH Texas"
-const OCCASION_COST = ethers.utils.parseUnits('1', 'ether')
-const OCCASION_MAX_TICKETS = 100
-const OCCASION_DATE = "Apr 27"
-const OCCASION_TIME = "10:00AM CST"
-const OCCASION_LOCATION = "Austin, Texas"
 
 describe("TokenMaster", () => {
+  let TokenMaster
+  let deployer, buyer
 
+  beforeEach(async () => {
+    //Setup accounts
+    [deployer, buyer] = await ethers.getSigners()
+    const TokenMaster = await ethers.getContractFactory("TokenMaster")
+    tokenMaster = await TokenMaster.deploy(NAME, SYMBOL)
+  })
+
+  describe("Deployment", () => {
+    it("Sets the name", async () => {
+      expect(await tokenMaster.name()).to.equal(NAME)
+    })
+
+    it("Sets the symbol", async () => {
+      expect(await tokenMaster.symbol()).to.equal(SYMBOL)
+    })
+
+    it("Sets the owner", async () => {
+      expect(await tokenMaster.owner()).to.equal(deployer.address)
+    })
+  })
 
 })
