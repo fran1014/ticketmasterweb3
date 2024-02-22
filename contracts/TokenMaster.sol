@@ -11,4 +11,13 @@ contract TokenMaster is ERC721 {
     ) ERC721(_name, _symbol) {
         owner = msg.sender;
     }
+
+    function list(
+        string memory _name,
+        uint256 _cost,
+        uint256 _maxTickets,
+        string memory _date,
+        string memory _time,
+        string memory _location,
+        ) public {}
 }
