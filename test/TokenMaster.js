@@ -47,20 +47,43 @@ describe("TokenMaster", () => {
     })
   })
 
-  it('Updates occasions count', async () => {
-    const totalOccasions = await tokenMaster.totalOccasions()
-    expect(totalOccasions).to.be.equal(1)
+  describe("Occasions", () => {
+    it('Updates occasions count', async () => {
+      const totalOccasions = await tokenMaster.totalOccasions()
+      expect(totalOccasions).to.be.equal(1)
+    })
+
+    it('Returns occasions attributes', async () => {
+      const occasion = await tokenMaster.getOccasion(1)
+      expect(occasion.id).to.be.equal(1)
+      expect(occasion.name).to.be.equal(OCCASION_NAME)
+      expect(occasion.cost).to.be.equal(OCCASION_COST)
+      expect(occasion.tickets).to.be.equal(OCCASION_MAX_TICKETS)
+      expect(occasion.date).to.be.equal(OCCASION_DATE)
+      expect(occasion.time).to.be.equal(OCCASION_TIME)
+      expect(occasion.location).to.be.equal(OCCASION_LOCATION)
+    })
+
   })
 
-  it('Returns occasions attributes', async () => {
-    const occasion = await tokenMaster.getOccasion(1)
-    expect(occasion.id).to.be.equal(1)
-    expect(occasion.name).to.be.equal(OCCASION_NAME)
-    expect(occasion.cost).to.be.equal(OCCASION_COST)
-    expect(occasion.tickets).to.be.equal(OCCASION_MAX_TICKETS)
-    expect(occasion.date).to.be.equal(OCCASION_DATE)
-    expect(occasion.time).to.be.equal(OCCASION_TIME)
-    expect(occasion.location).to.be.equal(OCCASION_LOCATION)
+  describe("Minting", () => {
+    const ID = 1
+    const SEAT = 50
+    const AMOUNT = ethers.utils.parseUnits('1', 'ether')
+
+    beforeEach(async () => {
+      const transaction = await tokenMaster.connect(buyer).mint(ID, SEAT, { value: AMOUNT })
+      await transaction.wait()
+    })
+
+    it('Updates ticket count', async () => {
+      const occasion = await tokenMaster.getOccasion(1)
+      expect(occasion.tickets).to.be.equal(OCCASION_MAX_TICKETS - 1)
+    })
+
+
   })
+
+
 
 })
