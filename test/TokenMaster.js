@@ -29,4 +29,9 @@ describe("TokenMaster", () => {
     })
   })
 
+  it('Updates occasions count', async () => {
+    const totalOccasions = await tokenMaster.totalOccasions()
+    expect(totalOccasions).to.be.equal(1)
+  })
+
 })
