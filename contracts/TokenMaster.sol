@@ -59,6 +59,18 @@ contract TokenMaster is ERC721 {
     }
 
     function mint(uint256 _id, uint256 _seat) public payable {
+        //Require that _id is not 0 or less than total occasions...
+
+        require(_id != 0);
+        require(_id <= totalOccasions);
+
+        //Require that ETH sent is greater than cost...
+        require(msg.value >= occasions[_id].cost);
+
+        //Require that the seat is not taken, and the seat exist...
+        require(seatTaken[_id][_seat] == address(0));
+        require(_seat <= occasions[_id].maxTickets);
+
         occasions[_id].tickets -= 1; // <-- Update ticket count
 
         hasBought[_id][msg.sender] = true; //<-- Update buying status
@@ -73,5 +85,14 @@ contract TokenMaster is ERC721 {
 
     function getOccasion(uint256 _id) public view returns (Occasion memory) {
         return occasions[_id];
+    }
+
+    function getSeatsTaken(uint256 _id) public view returns (uint256[] memory) {
+        return seatsTaken[_id];
+    }
+
+    function withdraw() public onlyOwner {
+        (bool success, ) = owner.call{value: address(this).balance}("");
+        require(success);
     }
 }
