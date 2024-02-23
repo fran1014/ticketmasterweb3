@@ -17,16 +17,20 @@ function App() {
   const [provider, setProvider] = useState(null)
   const [account, setAccount] = useState(null)
 
+  const [tokenMaster, setTokenMaster] = useState(null)
+
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     setProvider(provider)
 
+    const network = await provider.getNetwork()
+    const address = config[network.chainId].TokenMaster.address
+
     const tokenMaster = new ethers.Contract(
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address,
       TokenMaster,
       provider)
 
-    const address = config[31337].TokenMaster.address
 
     //Refresh Account 
     window.ethereum.on('accountsChanges', async () => {
