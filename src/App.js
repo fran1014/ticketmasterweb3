@@ -14,10 +14,19 @@ import TokenMaster from './abis/TokenMaster.json'
 import config from './config.json'
 
 function App() {
+  const [provider, setProvider] = useState(null)
   const [account, setAccount] = useState(null)
 
   const loadBlockchainData = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    setProvider(provider)
 
+    const tokenMaster = new ethers.Contract(
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      TokenMaster,
+      provider)
+
+    const address = config[31337].TokenMaster.address
 
     //Refresh Account 
     window.ethereum.on('accountsChanges', async () => {
