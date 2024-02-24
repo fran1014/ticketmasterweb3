@@ -18,6 +18,7 @@ function App() {
   const [account, setAccount] = useState(null)
 
   const [tokenMaster, setTokenMaster] = useState(null)
+  const [occasions, setOccasions] = useState([])
 
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -30,7 +31,19 @@ function App() {
       address,
       TokenMaster,
       provider)
+    setTokenMaster(tokenMaster)
 
+    const totalOccasions = await tokenMaster.totalOccasions()
+    const ocassions = []
+
+    for (var i = 1; i <= totalOccasions; i++) {
+      const occasion = await tokenMaster.getOccasion(i)
+      occasions.push(occasion)
+    }
+
+    setOccasions(occasions)
+
+    console.log(occasions)
 
     //Refresh Account 
     window.ethereum.on('accountsChanges', async () => {

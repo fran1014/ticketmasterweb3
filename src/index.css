@@ -139,7 +139,7 @@ header {
   background-position: right;
   background-repeat: no-repeat;
   background-color: var(--clr-grey);
-  min-height: 25vh;
+  min-height: 35vh;
 
   position: relative;
 }
@@ -148,6 +148,7 @@ header {
   color: var(--clr-white);
 
   position: absolute;
+  top: 55px; 
   bottom: 25px;
   left: 10%;
   max-width: 450px;
