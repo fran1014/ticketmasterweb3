@@ -20,6 +20,9 @@ function App() {
   const [tokenMaster, setTokenMaster] = useState(null)
   const [occasions, setOccasions] = useState([])
 
+  const [occasion, setOccasion] = useState({})
+  const [toggle, setToggle] = useState(false)
+
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     setProvider(provider)
@@ -34,7 +37,7 @@ function App() {
     setTokenMaster(tokenMaster)
 
     const totalOccasions = await tokenMaster.totalOccasions()
-    const ocassions = []
+    const occasions = []
 
     for (var i = 1; i <= totalOccasions; i++) {
       const occasion = await tokenMaster.getOccasion(i)
@@ -66,8 +69,30 @@ function App() {
         <Navigation account={account} setAccount={setAccount} />
         <h2 className='header__title'><strong> Event </strong> Tickets </h2>
       </header>
-      <h1>Hello World</h1>
-      <p> {account} </p>
+
+      <Sort />
+      <div className='cards'>
+        {occasions.map((occasion, index) => (
+          <Card
+            occasion={occasion}
+            id={index + 1}
+            tokenMaster={tokenMaster}
+            provider={provider}
+            account={account}
+            toggle={toggle}
+            setToggle={setToggle}
+            setOccasion={setOccasion}
+            key={index} />
+        ))}
+      </div>
+
+      {toggle && (
+        <SeatChart
+          occasion={occasion}
+          tokenMaster={tokenMaster}
+          provider={provider}
+          setToggle={setToggle} />
+      )}
     </div>
   );
 }
